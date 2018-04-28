@@ -22,11 +22,12 @@ public class Game extends JPanel implements KeyListener,ActionListener{
     
     private boolean play = false;
     private int score = 0;
+   
     
     private int nBricks = 21;
-    
+    private int HScore = 0;
     private Timer timer;
-    private int delay =8;
+    private int delay =9;
     
     private int playerPOSX = 310 ;
     
@@ -58,10 +59,17 @@ public class Game extends JPanel implements KeyListener,ActionListener{
         //draw map
         mp.draw((Graphics2D)g);
         
-        //scores
+        //scores and High score
         g.setColor(Color.white);
         g.setFont(new Font("serif", Font.BOLD,25));
-        g.drawString(""+score, 690, 30);
+        g.drawString("Score :"+score, 660, 30);
+        g.drawString("High Score :"+HScore, 480, 30);
+        
+        
+        //titles
+        g.setColor(Color.CYAN);
+        g.setFont(new Font("Sans serif", Font.BOLD, 42));
+        g.drawString("Brick Breakers", 230, 650);
         
         //borders
         g.setColor(Color.CYAN);
@@ -91,20 +99,32 @@ public class Game extends JPanel implements KeyListener,ActionListener{
             g.drawString("Press 'Enter' to restart", 250, 410);
         }
         
-        if(ballPOSY>670){
-            play =false;
-            ballXdir = 0;
-            ballYdir = 0;
-            g.setColor(Color.cyan);
-            g.setFont(new Font("serif", Font.BOLD,30));
-            g.drawString("Game Over!", 250, 350);
-            g.drawString("Your Score : "+score, 250, 380);
+        
+       B: if(ballPOSY>670 )
+        {
             
-            g.setColor(Color.red);
-            g.setFont(new Font("serif", Font.BOLD,20));
-            g.drawString("Press 'Enter' to restart", 250, 410);
+            play=false;
             
-        }
+                    if(score> HScore)
+                        HScore = score;
+                    ballXdir = 0;
+                    ballYdir = 0;
+                    g.setColor(Color.cyan);
+                    g.setFont(new Font("serif", Font.BOLD, 30));
+                    g.drawString("Game Over!", 250, 350);
+                    g.drawString("Your Score : " + score, 250, 380);
+                    g.setColor(Color.red);
+                    g.setFont(new Font("serif", Font.BOLD, 20));
+                    g.drawString("Press 'Enter' to restart", 250, 410);
+                    break B;
+                
+            }
+           
+            
+            
+            
+        
+                
         
         g.dispose();
         
@@ -164,7 +184,7 @@ public class Game extends JPanel implements KeyListener,ActionListener{
     
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT){
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT && play){
         
             if(playerPOSX>=700)
                 playerPOSX = 700;
@@ -172,7 +192,7 @@ public class Game extends JPanel implements KeyListener,ActionListener{
                 moveRight();
         }
         
-        if (e.getKeyCode() == KeyEvent.VK_LEFT){
+        if (e.getKeyCode() == KeyEvent.VK_LEFT && play){
         
             if(playerPOSX<=10)
                 playerPOSX = 10;
@@ -182,23 +202,28 @@ public class Game extends JPanel implements KeyListener,ActionListener{
         
         if (e.getKeyCode() == KeyEvent.VK_ENTER){
             if(!play){
-                play =true;
-                playerPOSX = 310 ;    
-                ballPOSX = 120;
-                ballPOSY = 350;
-                ballXdir = -1;
-                ballYdir = -2;
-                score = 0;
-                nBricks = 21;
-                mp = new Map(3, 7);
                 
-                repaint();
+                    play =true;
+                    playerPOSX = 310 ;    
+                    ballPOSX = 120;
+                    ballPOSY = 350;
+                    ballXdir = -1;
+                    ballYdir = -2;
+                    score = 0;
+                    
+                    nBricks = 21;
+                    mp = new Map(3, 7);
+                
+                    repaint();
+                }
+                
+              
             }
         
         
         }
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
     public void moveRight(){
     
